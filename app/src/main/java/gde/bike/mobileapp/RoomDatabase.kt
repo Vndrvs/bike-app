@@ -27,7 +27,7 @@ class Bike(
 
 @Database(
     entities = [Bike::class],
-    // létrehozáskor mindenképpen szükséges a verziószám megadása
+    // létrehozáskor mindenképpen szükséges a verziószám megadása az adatbázis sémához
     version = 1
 )
 
@@ -35,9 +35,9 @@ abstract class AppDatabase: RoomDatabase() {
     companion object{
         fun buildDb(context: Context) = Room.databaseBuilder(context, AppDatabase::class.java, "bike.db")
             // .allowMainThreadQueries() kivételesen azért kell, hogy időigényes query ne akassza meg a threadet
-            // ez alapesetben bad practice, csak a példa erejéig alkalmazzuk, hogy most ne kelljen multithreadelni
+            // ez alapesetben bad practice(KERÜLENDŐ), csak a példa erejéig alkalmazzuk, hogy most ne kelljen multithreadelni
             .allowMainThreadQueries()
-            // ha az adatok más forrásból cachelve érkeznek a programba és egyszerűen elérhetőek,
+            // pl. ha az adatok más forrásból cachelve érkeznek a programba és egyszerűen elérhetőek,
             // akkor használható a fallbackToDestructiveMigration()
             .fallbackToDestructiveMigration(true)
             .build()
@@ -52,9 +52,9 @@ interface BikeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE) // mit csináljon a program, ha már talál ilyen recordot a táblában
     fun insert(bike: List<Bike>)
 
-    @Query("SELECT * FROM bikes")
+    @Query("SELECT * FROM bikes") // teljes bicikli lista lekérése
     fun getAllBikes(): List<Bike>
 
-    @Query("SELECT * FROM bikes WHERE id = :id")
+    @Query("SELECT * FROM bikes WHERE id = :id") // konkrét bicikli lekérése, ID használatával
     fun getBikeById(id: Long): Bike?
 }
