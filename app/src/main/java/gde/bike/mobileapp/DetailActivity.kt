@@ -28,7 +28,6 @@ class DetailActivity: androidx.appcompat.app.AppCompatActivity() {
 
     }
     companion object {
-        const val EXTRA_TEXT = "text"
         const val EXTRA_ID = "id"
     }
 }
